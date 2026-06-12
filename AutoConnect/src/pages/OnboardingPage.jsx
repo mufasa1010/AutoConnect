@@ -47,7 +47,7 @@ export default function OnboardingPage() {
             <p className="text-muted text-sm">
               I need assistance or maintenance. Access top-rated mechanics nearby instantly.
             </p>
-            <Button variant="contained" color="primary" fullWidth component={Link} to="/" sx={{ mt: "auto" }}>
+            <Button variant="contained" color="primary" fullWidth component={Link} to="/signup?role=owner" sx={{ mt: "auto" }}>
               Select Owner
             </Button>
           </div>
@@ -68,7 +68,7 @@ export default function OnboardingPage() {
             <p className="text-muted text-sm">
               I want to provide services and find customers. Grow your business with our platform.
             </p>
-            <Button variant="outlined" color="primary" fullWidth component={Link} to="/" sx={{ mt: "auto" }}>
+            <Button variant="outlined" color="primary" fullWidth component={Link} to="/signup?role=mechanic" sx={{ mt: "auto" }}>
               Select Mechanic
             </Button>
           </div>
@@ -78,7 +78,7 @@ export default function OnboardingPage() {
       {/* Footer note */}
       <div className="mt-8 text-sm text-muted animate-fade-up animate-delay-300">
         Already have an account?{" "}
-        <Link to="/" className="text-primary font-semibold hover:underline">
+        <Link to="/login" className="text-primary font-semibold hover:underline">
           Sign In
         </Link>
       </div>

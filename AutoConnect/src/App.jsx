@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage        from "./pages/HomePage";
@@ -7,19 +6,26 @@ import FindMechanics   from "./pages/FindMechanics";
 import HowItWorks      from "./pages/HowItWorks";
 import ContactPage     from "./pages/ContactPage";
 import OnboardingPage  from "./pages/OnboardingPage";
+import LoginPage       from "./pages/LoginPage";
+import SignupPage      from "./pages/SignupPage";
 import Navbar          from "./components/common/Navbar";
 import Footer          from "./components/common/Footer";
+import { AuthProvider } from "./context/AuthContext";
 
 export default function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        {/* Full-page route (no navbar/footer) */}
-        <Route path="/get-started" element={<OnboardingPage />} />
+      <AuthProvider>
+        <Routes>
+          {/* Full-page routes (no navbar/footer) */}
+          <Route path="/get-started" element={<OnboardingPage />} />
+          <Route path="/login"       element={<LoginPage />} />
+          <Route path="/signup"      element={<SignupPage />} />
 
-        {/* Routes with shared layout */}
-        <Route path="/*" element={<Layout />} />
-      </Routes>
+          {/* Routes with shared layout */}
+          <Route path="/*" element={<Layout />} />
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   );
 }
