@@ -9,12 +9,12 @@ import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import FlashOnIcon from "@mui/icons-material/FlashOn";
 
 const team = [
-  { name: "Tande Lindy", role: "CEO & Co-founder",      img: "https://i.pravatar.cc/120?img=51" },
-  { name: "Eyeni-Mbu Nyellie",        role: "Head of Product",       img: "https://i.pravatar.cc/120?img=47" },
-  { name: "Abonkwe Princely",        role: "Chief Technology Officer",img: "https://i.pravatar.cc/120?img=53"},
-  { name: "Amadou Mustapha",        role: "Operations Director",   img: "https://i.pravatar.cc/120?img=49" },
-  { name: "Atem Davinel",        role: "Operations Director",   img: "https://i.pravatar.cc/120?img=49" },
-  { name: "Mesape Delalune",        role: "General Overseer",   img: "https://i.pravatar.cc/120?img=49" },
+  { name: "Tande Lindy", role: "CEO & Co-founder",      img: "/WhatsApp Image 2026-06-16 at 14.22.44.jpeg" },
+  { name: "Eyeni-Mbu Nyellie",        role: "Head of Product",       img: "/WhatsApp Image 2026-06-16 at 13.58.32.jpeg" },
+  { name: "Abonkwe Princely",        role: "Chief Technology Officer",img: "/WhatsApp Image 2026-06-16 at 13.59.42.jpeg"},
+  { name: "Amadou Mustapha",        role: "Operations Director",   img: "/WhatsApp Image 2026-06-16 at 14.03.03.jpeg" },
+  { name: "Atem Davinel",        role: "Operations Director",   img: "/WhatsApp Image 2026-06-16 at 14.08.26.jpeg" },
+  { name: "Mesape Delalune",        role: "General Overseer",   img: "/WhatsApp Image 2026-06-16 at 14.05.36.jpeg" },
 ];
 
 const values = [
