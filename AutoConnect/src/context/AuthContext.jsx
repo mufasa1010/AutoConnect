@@ -14,29 +14,29 @@ export function AuthProvider({ children }) {
       const { data, error } = await supabase
         .from("user-accounts")
         .select("*")
-        .eq("user_id", authUser.id)
-        .single();
+        .eq("user_id", authUser.id).execute();
+        // .single();
 
       if (error) {
         console.warn("Could not fetch database profile, falling back to auth metadata:", error.message);
         // Fallback: If database profile doesn't exist yet, populate user from metadata
         setUser({
-          id: authUser.id,
+          user_id: authUser.id,
           email: authUser.email,
-          name: authUser.user_metadata?.full_name || authUser.email,
-          phoneNumber: authUser.user_metadata?.phone_number || "",
-          role: authUser.user_metadata?.account_type || "owner",
+          full_name: authUser.user_metadata?.full_name || authUser.email,
+          phone_number: authUser.user_metadata?.phone_number || "",
+          account_type: authUser.user_metadata?.account_type || "owner",
           avatar: authUser.user_metadata?.avatar || `https://i.pravatar.cc/150?img=33`,
         });
       } else {
         // Success: Combine auth user session with database record
         setUser({
-          id: data.user_id,
+          user_id: data.user_id,
           email: authUser.email,
-          name: data.full_name,
-          phoneNumber: data.phone_number,
-          role: data.account_type,
-          avatar: authUser.user_metadata?.avatar || `https://i.pravatar.cc/150?img=33`,
+          full_name: data.full_name,
+          phone_number: data.phone_number,
+          account_type: data.account_type,
+          // avatar: authUser.user_metadata?.avatar || `https://i.pravatar.cc/150?img=33`,
         });
       }
     } catch (e) {

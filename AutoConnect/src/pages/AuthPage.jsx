@@ -91,7 +91,7 @@ export default function AuthPage() {
     setAvatarPreview("");
   }, [isSignUp]);
 
-  // 4. PHONE VALIDATION FUNCTION (Cameroon Format)
+  // phone number validation
   const validatePhone = (phoneNumber) => {
     // Strip non-numeric characters
     const digitsOnly = phoneNumber.replace(/\D/g, "");
