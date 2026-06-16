@@ -24,8 +24,10 @@ export function AuthProvider({ children }) {
           user_id: authUser.id,
           email: authUser.email,
           full_name: authUser.user_metadata?.full_name || authUser.email,
+          name: authUser.user_metadata?.full_name || authUser.email,
           phone_number: authUser.user_metadata?.phone_number || "",
           account_type: authUser.user_metadata?.account_type || "owner",
+          role: authUser.user_metadata?.account_type || "owner",
           avatar: authUser.user_metadata?.avatar || `https://i.pravatar.cc/150?img=33`,
         });
       } else {
@@ -34,8 +36,10 @@ export function AuthProvider({ children }) {
           user_id: data.user_id,
           email: authUser.email,
           full_name: data.full_name,
+          name: data.full_name,
           phone_number: data.phone_number,
           account_type: data.account_type,
+          role: data.account_type,
           avatar: authUser.user_metadata?.avatar || `https://i.pravatar.cc/150?img=33`,
         });
       }
