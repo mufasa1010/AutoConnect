@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate, useLocation, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useLocation,
+  useSearchParams,
+} from "react-router-dom";
 import {
   Button,
   TextField,
@@ -27,7 +32,7 @@ import { useAuth } from "../context/AuthContext";
 
 /**
  * AuthPage Component (Linked to Supabase)
- * 
+ *
  * A unified page handling both Sign In and Sign Up flows.
  * Displays a centered modal-like card, uses search/path parameters to sync state,
  * contains a small sliding toggle switch to shift modes dynamically,
@@ -52,7 +57,7 @@ export default function AuthPage() {
   const [role, setRole] = useState("owner"); // "owner" or "mechanic"
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-  
+
   // Custom Avatar Upload states
   const [avatarFile, setAvatarFile] = useState(null);
   const [avatarPreview, setAvatarPreview] = useState("");
@@ -95,12 +100,15 @@ export default function AuthPage() {
   const validatePhone = (phoneNumber) => {
     // Strip non-numeric characters
     const digitsOnly = phoneNumber.replace(/\D/g, "");
-    
+
     // Cameroonian numbers are typically 9 digits, starting with 6 (mobile) or 2 (landline)
     // If the number contains 237 (country code), it might be 12 digits (e.g. 237699...)
-    const isNineDigits = digitsOnly.length === 9 && (digitsOnly.startsWith("6") || digitsOnly.startsWith("2"));
-    const isCountryCodeFormat = digitsOnly.length === 12 && digitsOnly.startsWith("237");
-    
+    const isNineDigits =
+      digitsOnly.length === 9 &&
+      (digitsOnly.startsWith("6") || digitsOnly.startsWith("2"));
+    const isCountryCodeFormat =
+      digitsOnly.length === 12 && digitsOnly.startsWith("237");
+
     return isNineDigits || isCountryCodeFormat;
   };
 
@@ -153,7 +161,14 @@ export default function AuthPage() {
 
     if (isSignUp) {
       // Run Sign Up Flow (passing form parameters and file upload)
-      const result = await signup(name, email, phone, password, role, avatarFile);
+      const result = await signup(
+        email,
+        phone,
+        password,
+        role,
+        name,
+        avatarFile,
+      );
       if (result.success) {
         setSuccess(true);
         setTimeout(() => navigate("/"), 1500);
@@ -181,27 +196,34 @@ export default function AuthPage() {
   // 7. GOOGLE / FACEBOOK SIGN-IN MOCK
   // In a full Supabase build, these can be linked to supabase.auth.signInWithOAuth()
   const handleSocialSignIn = () => {
-    alert("Social Login Callback: In production, configure Supabase OAuth credentials under Authentication -> Providers.");
+    alert(
+      "Social Login Callback: In production, configure Supabase OAuth credentials under Authentication -> Providers.",
+    );
   };
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-[#F5F6F8] relative overflow-hidden py-12 px-4">
-      
       {/* Visual Accent Backgrounds (Glow elements) */}
       <div className="absolute top-[-10%] left-[-10%] w-[40vw] h-[40vw] rounded-full bg-[#1DB954]/10 blur-[100px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-[#0D2B45]/20 blur-[120px] pointer-events-none" />
 
       {/* Main Container Card */}
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg border border-gray-100 p-8 z-10 animate-fade-up">
-        
         {/* Brand Header */}
         <div className="flex flex-col items-center mb-6">
           <div className="w-12 h-12 rounded-2xl bg-[#0D2B45] flex items-center justify-center shadow-md mb-3">
-            <DirectionsCarIcon className="text-[#1DB954]" sx={{ fontSize: 28 }} />
+            <DirectionsCarIcon
+              className="text-[#1DB954]"
+              sx={{ fontSize: 28 }}
+            />
           </div>
-          <span className="font-heading font-extrabold text-2xl text-[#0D2B45] tracking-tight">AutoConnect</span>
+          <span className="font-heading font-extrabold text-2xl text-[#0D2B45] tracking-tight">
+            AutoConnect
+          </span>
           <p className="text-gray-500 text-xs mt-1 text-center font-body">
-            {isSignUp ? "Create a Cameroon Automotive account" : "Access your automotive control panel"}
+            {isSignUp
+              ? "Create a Cameroon Automotive account"
+              : "Access your automotive control panel"}
           </p>
         </div>
 
@@ -211,8 +233,8 @@ export default function AuthPage() {
             type="button"
             onClick={() => navigate("/login")}
             className={`flex-1 py-2 text-center text-sm font-semibold rounded-lg z-10 transition-all duration-200 ${
-              !isSignUp 
-                ? "bg-white text-[#0D2B45] shadow-sm" 
+              !isSignUp
+                ? "bg-white text-[#0D2B45] shadow-sm"
                 : "text-gray-500 hover:text-gray-800"
             }`}
           >
@@ -222,8 +244,8 @@ export default function AuthPage() {
             type="button"
             onClick={() => navigate("/signup")}
             className={`flex-1 py-2 text-center text-sm font-semibold rounded-lg z-10 transition-all duration-200 ${
-              isSignUp 
-                ? "bg-white text-[#0D2B45] shadow-sm" 
+              isSignUp
+                ? "bg-white text-[#0D2B45] shadow-sm"
                 : "text-gray-500 hover:text-gray-800"
             }`}
           >
@@ -235,7 +257,9 @@ export default function AuthPage() {
         {success && (
           <Fade in={success}>
             <Alert severity="success" className="mb-4 font-body text-xs">
-              {isSignUp ? "Account created successfully! Logging you in..." : "Sign in successful! Redirecting..."}
+              {isSignUp
+                ? "Account created successfully! Logging you in..."
+                : "Sign in successful! Redirecting..."}
             </Alert>
           </Fade>
         )}
@@ -251,7 +275,6 @@ export default function AuthPage() {
 
         {/* AUTHENTICATION FORM */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          
           {/* SIGN UP ONLY FIELDS */}
           {isSignUp && (
             <>
@@ -339,7 +362,9 @@ export default function AuthPage() {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <PersonOutlined sx={{ color: "var(--color-muted)", fontSize: 18 }} />
+                      <PersonOutlined
+                        sx={{ color: "var(--color-muted)", fontSize: 18 }}
+                      />
                     </InputAdornment>
                   ),
                 }}
@@ -359,7 +384,9 @@ export default function AuthPage() {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <PhoneOutlined sx={{ color: "var(--color-muted)", fontSize: 18 }} />
+                      <PhoneOutlined
+                        sx={{ color: "var(--color-muted)", fontSize: 18 }}
+                      />
                     </InputAdornment>
                   ),
                 }}
@@ -381,7 +408,9 @@ export default function AuthPage() {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <EmailOutlined sx={{ color: "var(--color-muted)", fontSize: 18 }} />
+                  <EmailOutlined
+                    sx={{ color: "var(--color-muted)", fontSize: 18 }}
+                  />
                 </InputAdornment>
               ),
             }}
@@ -400,13 +429,23 @@ export default function AuthPage() {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <LockOutlined sx={{ color: "var(--color-muted)", fontSize: 18 }} />
+                  <LockOutlined
+                    sx={{ color: "var(--color-muted)", fontSize: 18 }}
+                  />
                 </InputAdornment>
               ),
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton onClick={() => setShowPassword(!showPassword)} edge="end" size="small">
-                    {showPassword ? <VisibilityOff sx={{ fontSize: 18 }} /> : <Visibility sx={{ fontSize: 18 }} />}
+                  <IconButton
+                    onClick={() => setShowPassword(!showPassword)}
+                    edge="end"
+                    size="small"
+                  >
+                    {showPassword ? (
+                      <VisibilityOff sx={{ fontSize: 18 }} />
+                    ) : (
+                      <Visibility sx={{ fontSize: 18 }} />
+                    )}
                   </IconButton>
                 </InputAdornment>
               ),
@@ -428,13 +467,25 @@ export default function AuthPage() {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <LockOutlined sx={{ color: "var(--color-muted)", fontSize: 18 }} />
+                    <LockOutlined
+                      sx={{ color: "var(--color-muted)", fontSize: 18 }}
+                    />
                   </InputAdornment>
                 ),
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton onClick={() => setShowConfirmPassword(!showConfirmPassword)} edge="end" size="small">
-                      {showConfirmPassword ? <VisibilityOff sx={{ fontSize: 18 }} /> : <Visibility sx={{ fontSize: 18 }} />}
+                    <IconButton
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
+                      edge="end"
+                      size="small"
+                    >
+                      {showConfirmPassword ? (
+                        <VisibilityOff sx={{ fontSize: 18 }} />
+                      ) : (
+                        <Visibility sx={{ fontSize: 18 }} />
+                      )}
                     </IconButton>
                   </InputAdornment>
                 ),
@@ -458,14 +509,29 @@ export default function AuthPage() {
                 label={
                   <span className="font-body text-xs text-gray-650">
                     I agree to the{" "}
-                    <a href="#" className="font-bold underline" onClick={(e) => e.preventDefault()}>Terms</a>{" "}
+                    <a
+                      href="#"
+                      className="font-bold underline"
+                      onClick={(e) => e.preventDefault()}
+                    >
+                      Terms
+                    </a>{" "}
                     and{" "}
-                    <a href="#" className="font-bold underline" onClick={(e) => e.preventDefault()}>Privacy</a>.
+                    <a
+                      href="#"
+                      className="font-bold underline"
+                      onClick={(e) => e.preventDefault()}
+                    >
+                      Privacy
+                    </a>
+                    .
                   </span>
                 }
               />
               {errors.agreeTerms && (
-                <span className="text-[11px] text-[#E53935] ml-7 font-body">{errors.agreeTerms}</span>
+                <span className="text-[11px] text-[#E53935] ml-7 font-body">
+                  {errors.agreeTerms}
+                </span>
               )}
             </div>
           ) : (
@@ -481,7 +547,9 @@ export default function AuthPage() {
                   />
                 }
                 label={
-                  <span className="font-body text-xs text-gray-700">Remember me</span>
+                  <span className="font-body text-xs text-gray-700">
+                    Remember me
+                  </span>
                 }
               />
               <Link
@@ -489,7 +557,9 @@ export default function AuthPage() {
                 className="text-[#0D2B45] font-semibold hover:underline no-underline"
                 onClick={(e) => {
                   e.preventDefault();
-                  alert("Password recovery placeholder: In a production setup, this would trigger an email recovery flow.");
+                  alert(
+                    "Password recovery placeholder: In a production setup, this would trigger an email recovery flow.",
+                  );
                 }}
               >
                 Forgot Password?
@@ -512,7 +582,7 @@ export default function AuthPage() {
               backgroundColor: "#0D2B45",
               "&:hover": {
                 backgroundColor: "#091e30",
-              }
+              },
             }}
           >
             {isSignUp ? "Sign Up" : "Sign In"}
@@ -585,7 +655,11 @@ export default function AuthPage() {
               },
             }}
             startIcon={
-              <svg className="w-4 h-4 mr-0.5" viewBox="0 0 24 24" fill="currentColor">
+              <svg
+                className="w-4 h-4 mr-0.5"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
                 <path d="M12 2C6.477 2 2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.879V14.89h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.989C18.343 21.129 22 16.99 22 12c0-5.523-4.477-10-10-10z" />
               </svg>
             }
@@ -596,11 +670,13 @@ export default function AuthPage() {
 
         {/* Back Link to Home */}
         <div className="mt-6 text-center">
-          <Link to="/" className="text-xs text-gray-500 hover:text-[#0D2B45] font-body transition-colors">
+          <Link
+            to="/"
+            className="text-xs text-gray-500 hover:text-[#0D2B45] font-body transition-colors"
+          >
             ← Back to home page
           </Link>
         </div>
-
       </div>
     </div>
   );

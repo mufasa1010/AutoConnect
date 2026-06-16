@@ -10,12 +10,12 @@ export function AuthProvider({ children }) {
   // Helper function: Fetch user profile from the database USER-ACCOUNTS table
   const fetchUserProfile = async (authUser) => {
     try {
-      // Fetch details from the USER-ACCOUNTS table
+      // Fetch details from the USER-ACCOUNTS table using .single() for a single object response
       const { data, error } = await supabase
         .from("user-accounts")
         .select("*")
-        .eq("user_id", authUser.id).execute();
-        // .single();
+        .eq("user_id", authUser.id)
+        .single();
 
       if (error) {
         console.warn("Could not fetch database profile, falling back to auth metadata:", error.message);
@@ -36,7 +36,7 @@ export function AuthProvider({ children }) {
           full_name: data.full_name,
           phone_number: data.phone_number,
           account_type: data.account_type,
-          // avatar: authUser.user_metadata?.avatar || `https://i.pravatar.cc/150?img=33`,
+          avatar: authUser.user_metadata?.avatar || `https://i.pravatar.cc/150?img=33`,
         });
       }
     } catch (e) {
@@ -78,7 +78,7 @@ export function AuthProvider({ children }) {
     };
   }, []);
 
-  // Login handler
+  // Login handler: Accepts email and password
   const login = async (email, password) => {
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -95,11 +95,11 @@ export function AuthProvider({ children }) {
     }
   };
 
-  // Sign up handler (includes Supabase Storage avatar upload)
-  const signup = async (name, email, phoneNumber, password, role, avatarFile) => {
+  // Sign up handler: Accepts matching form elements (email, phone_number, password, account_type, full_name)
+  const signup = async (email, phone_number, password, account_type, full_name, avatarFile = null) => {
     try {
       // Formats the phone number to clean presentation
-      let cleanPhone = phoneNumber.replace(/[^\d+]/g, "");
+      let cleanPhone = phone_number.replace(/[^\d+]/g, "");
       if (!cleanPhone.startsWith("+") && !cleanPhone.startsWith("237")) {
         cleanPhone = `+237${cleanPhone}`;
       }
@@ -110,9 +110,9 @@ export function AuthProvider({ children }) {
         password,
         options: {
           data: {
-            full_name: name,
+            full_name,
             phone_number: cleanPhone,
-            account_type: role,
+            account_type,
           }
         }
       });
@@ -130,7 +130,7 @@ export function AuthProvider({ children }) {
         try {
           const fileExt = avatarFile.name.split(".").pop();
           const fileName = `${authUserId}_${Date.now()}.${fileExt}`;
-          const filePath = `public/${fileName}`; // Put in public folder/path inside the bucket
+          const filePath = `public/${fileName}`; 
 
           const { error: uploadError } = await supabase.storage
             .from("avatars")
@@ -164,18 +164,18 @@ export function AuthProvider({ children }) {
         .from("user-accounts")
         .insert({
           user_id: authUserId,
-          full_name: name,
+          full_name,
           phone_number: cleanPhone,
-          account_type: role,
+          account_type,
         });
 
       if (profileError) {
         console.error("Failed db profile write:", profileError.message);
         return { success: false, error: `Account created in Auth, but profile write failed: ${profileError.message}` };
       }
-
+      console.log(email)
       // Step 5: If user is a mechanic, initialize row in MECHANIC-PROFILES table
-      if (role === "mechanic") {
+      if (account_type === "mechanic") {
         const { error: mechanicError } = await supabase
           .from("mechanic-profiles")
           .insert({
@@ -184,7 +184,7 @@ export function AuthProvider({ children }) {
             active_or_off_duty: "active",
             location_coordinates: "4.0503, 9.7679", // Cameroon Default
           });
-
+        
         if (mechanicError) {
           console.error("Failed db mechanic profile write:", mechanicError.message);
         }
